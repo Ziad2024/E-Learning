@@ -1,0 +1,782 @@
+{
+	"info": {
+		"name": "NTI E-Learning API",
+		"description": "Full API collection for the NTI E-Learning Platform.\n\n**Setup:**\n1. Register a user\n2. Login → tokens are saved automatically\n3. Use the other endpoints\n\n**Variables:**\n- `baseUrl` → http://localhost:3000\n- `accessToken` → set automatically on login\n- `refreshToken` → set automatically on login\n- `userId`, `courseId`, `lessonId`, `enrollmentId` → set as you go",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{ "key": "baseUrl", "value": "http://localhost:3000" },
+		{ "key": "accessToken", "value": "" },
+		{ "key": "refreshToken", "value": "" },
+		{ "key": "userId", "value": "" },
+		{ "key": "courseId", "value": "" },
+		{ "key": "lessonId", "value": "" },
+		{ "key": "enrollmentId", "value": "" }
+	],
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();",
+									"if (res.data && res.data._id) {",
+									"    pm.collectionVariables.set('userId', res.data._id);",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Omar\",\n    \"lastName\": \"Tarek\",\n    \"email\": \"omar@test.com\",\n    \"password\": \"Test@1234\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/register",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Register Admin (change role in DB after)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Admin\",\n    \"lastName\": \"User\",\n    \"email\": \"admin@test.com\",\n    \"password\": \"Admin@1234\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/register",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Register Instructor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Instructor\",\n    \"lastName\": \"One\",\n    \"email\": \"instructor@test.com\",\n    \"password\": \"Inst@1234\",\n    \"role\": \"instructor\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/register",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();",
+									"if (res.data && res.data.tokens) {",
+									"    pm.collectionVariables.set('accessToken', res.data.tokens.access_token);",
+									"    pm.collectionVariables.set('refreshToken', res.data.tokens.refresh_token);",
+									"}",
+									"if (res.data && res.data.user && res.data.user._id) {",
+									"    pm.collectionVariables.set('userId', res.data.user._id);",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"omar@test.com\",\n    \"password\": \"Test@1234\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Login as Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();",
+									"if (res.data && res.data.tokens) {",
+									"    pm.collectionVariables.set('accessToken', res.data.tokens.access_token);",
+									"    pm.collectionVariables.set('refreshToken', res.data.tokens.refresh_token);",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@test.com\",\n    \"password\": \"Admin@1234\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Login as Instructor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();",
+									"if (res.data && res.data.tokens) {",
+									"    pm.collectionVariables.set('accessToken', res.data.tokens.access_token);",
+									"    pm.collectionVariables.set('refreshToken', res.data.tokens.refresh_token);",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"instructor@test.com\",\n    \"password\": \"Inst@1234\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();",
+									"if (res.data && res.data.accessToken) {",
+									"    pm.collectionVariables.set('accessToken', res.data.accessToken);",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "refreshtoken", "value": "{{refreshToken}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/auth/refresh-token",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "refresh-token"]
+						}
+					}
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"omar@test.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/forgot-password",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "forgot-password"]
+						}
+					}
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\": \"NewPass@1234\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/reset-password/:token",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "reset-password", ":token"],
+							"variable": [
+								{ "key": "token", "value": "PASTE_RESET_TOKEN_HERE" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{accessToken}}" },
+							{ "key": "refreshtoken", "value": "{{refreshToken}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/auth/logout",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "logout"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{accessToken}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/users/profile",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "profile"]
+						}
+					}
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{accessToken}}" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Omar Updated\",\n    \"bio\": \"Full-stack developer\",\n    \"phone\": \"01012345678\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/profile",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "profile"]
+						}
+					}
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{accessToken}}" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"currentPassword\": \"Test@1234\",\n    \"newPassword\": \"NewTest@1234\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/change-password",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "change-password"]
+						}
+					}
+				},
+				{
+					"name": "Upload Avatar",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{accessToken}}" }
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": ""
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/profile/avatar",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "profile", "avatar"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"description": "All routes require admin role. Login as admin first.",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{accessToken}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/users?page=1&limit=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "users"],
+							"query": [
+								{ "key": "page", "value": "1" },
+								{ "key": "limit", "value": "10" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Get All Users (filter by role)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{accessToken}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/users?role=student&page=1&limit=5",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "users"],
+							"query": [
+								{ "key": "role", "value": "student" },
+								{ "key": "page", "value": "1" },
+								{ "key": "limit", "value": "5" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{accessToken}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/users/{{userId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "users", "{{userId}}"]
+						}
+					}
+				},
+				{
+					"name": "Update User Role",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{accessToken}}" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"role\": \"instructor\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/users/{{userId}}/role",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "users", "{{userId}}", "role"]
+						}
+					}
+				},
+				{
+					"name": "Delete User (soft delete)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{accessToken}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/users/{{userId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "users", "{{userId}}"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Courses",
+			"item": [
+				{
+					"name": "Create Course",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();",
+									"if (res.data && res.data._id) {",
+									"    pm.collectionVariables.set('courseId', res.data._id);",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{accessToken}}" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Node.js Masterclass\",\n    \"description\": \"Learn Node.js from scratch to advanced topics including Express, MongoDB, and REST APIs.\",\n    \"price\": 49.99,\n    \"level\": \"beginner\",\n    \"duration\": 40,\n    \"status\": \"published\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/courses",
+							"host": ["{{baseUrl}}"],
+							"path": ["courses"]
+						}
+					}
+				},
+				{
+					"name": "Get All Courses",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/courses?page=1&limit=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["courses"],
+							"query": [
+								{ "key": "page", "value": "1" },
+								{ "key": "limit", "value": "10" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Get All Courses (filter by level)",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/courses?level=beginner&page=1&limit=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["courses"],
+							"query": [
+								{ "key": "level", "value": "beginner" },
+								{ "key": "page", "value": "1" },
+								{ "key": "limit", "value": "10" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Course by ID",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/courses/{{courseId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["courses", "{{courseId}}"]
+						}
+					}
+				},
+				{
+					"name": "Update Course",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{accessToken}}" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Node.js Masterclass 2025\",\n    \"price\": 59.99,\n    \"level\": \"intermediate\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/courses/{{courseId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["courses", "{{courseId}}"]
+						}
+					}
+				},
+				{
+					"name": "Delete Course",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{accessToken}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/courses/{{courseId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["courses", "{{courseId}}"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Lessons",
+			"item": [
+				{
+					"name": "Create Lesson",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();",
+									"if (res.data && res.data._id) {",
+									"    pm.collectionVariables.set('lessonId', res.data._id);",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{accessToken}}" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Introduction to Node.js\",\n    \"course\": \"{{courseId}}\",\n    \"description\": \"In this lesson we cover the basics of Node.js runtime.\",\n    \"content\": \"<h1>Welcome to Node.js</h1><p>Node.js is a JavaScript runtime...</p>\",\n    \"type\": \"text\",\n    \"duration\": 30,\n    \"order\": 1,\n    \"isPublished\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/lessons",
+							"host": ["{{baseUrl}}"],
+							"path": ["lessons"]
+						}
+					}
+				},
+				{
+					"name": "Create Lesson 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();",
+									"if (res.data && res.data._id) {",
+									"    pm.collectionVariables.set('lessonId', res.data._id);",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{accessToken}}" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Setting Up Express\",\n    \"course\": \"{{courseId}}\",\n    \"description\": \"Learn how to set up an Express.js server.\",\n    \"type\": \"video\",\n    \"duration\": 45,\n    \"order\": 2,\n    \"isPublished\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/lessons",
+							"host": ["{{baseUrl}}"],
+							"path": ["lessons"]
+						}
+					}
+				},
+				{
+					"name": "Get All Lessons",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/lessons?page=1&limit=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["lessons"],
+							"query": [
+								{ "key": "page", "value": "1" },
+								{ "key": "limit", "value": "10" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Lessons by Course",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/lessons?course={{courseId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["lessons"],
+							"query": [
+								{ "key": "course", "value": "{{courseId}}" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Lesson by ID",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{baseUrl}}/lessons/{{lessonId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["lessons", "{{lessonId}}"]
+						}
+					}
+				},
+				{
+					"name": "Update Lesson",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{accessToken}}" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Introduction to Node.js (Updated)\",\n    \"duration\": 35,\n    \"isPublished\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/lessons/{{lessonId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["lessons", "{{lessonId}}"]
+						}
+					}
+				},
+				{
+					"name": "Delete Lesson",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{accessToken}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/lessons/{{lessonId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["lessons", "{{lessonId}}"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Enrollments",
+			"item": [
+				{
+					"name": "Enroll in Course",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();",
+									"if (res.data && res.data._id) {",
+									"    pm.collectionVariables.set('enrollmentId', res.data._id);",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{accessToken}}" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"course\": \"{{courseId}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/enrollments",
+							"host": ["{{baseUrl}}"],
+							"path": ["enrollments"]
+						}
+					}
+				},
+				{
+					"name": "Get My Enrollments",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{accessToken}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/enrollments?page=1&limit=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["enrollments"],
+							"query": [
+								{ "key": "page", "value": "1" },
+								{ "key": "limit", "value": "10" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Get All Enrollments (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{accessToken}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/enrollments?page=1&limit=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["enrollments"],
+							"query": [
+								{ "key": "page", "value": "1" },
+								{ "key": "limit", "value": "10" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Cancel Enrollment",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{accessToken}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/enrollments/{{enrollmentId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["enrollments", "{{enrollmentId}}"]
+						}
+					}
+				}
+			]
+		}
+	]
+}
